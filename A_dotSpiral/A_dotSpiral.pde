@@ -31,7 +31,7 @@ void draw() {
   ellipse(eX, eY, eWidth, eHeight);
   
   dV = random(0,.5);
-  dV=.01;
+  dV=.4;
   //if(random(0,1)>=.5){dV*=-1;}
   velocity += dV;
   angle += random(0, 10) * Math.PI/180;
@@ -45,6 +45,6 @@ void draw() {
     velocity = startVelocity;
     fill(random(0,255),random(0,255),random(0,255));
   }
-  
+  saveFrame("dots-####.jpg");
 }
 
