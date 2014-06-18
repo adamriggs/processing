@@ -1,6 +1,7 @@
 //make a ball bounce around using a class for the ball
 int wWidth = 1280;
 int wHeight = 720;
+double maxD = Math.sqrt((wWidth*wWidth) + (wHeight*wHeight));
 Ball ball = new Ball();
 
 void setup(){
@@ -22,10 +23,11 @@ class Ball{
   float dV = 0;
   double startAngle = random(0, 360) * Math.PI/180;
   float angle = (float) startAngle;
+  float maxA = (float) Math.PI;
   float eWidth = 10;
   float eHeight = 10;
-  //float eX = random(0, wWidth);
-  //float eY = random(0, wHeight);
+//  float eX = random(0, wWidth);
+//  float eY = random(0, wHeight);
   float eX = wWidth/2;
   float eY = wHeight/2;
   
@@ -33,11 +35,24 @@ class Ball{
   void draw(){
     ellipse(eX, eY, eWidth, eHeight);
     
-    dV = random(0,.5);
-    dV=.01;
-    //if(random(0,1)>=.5){dV*=-1;}
-    velocity += dV;
-    angle += random(0, 10) * Math.PI/180;
+    float[] distances = {eY, wWidth - eX, wHeight - eY, eX};
+    distances = sort(distances);
+    float curD = (distances[0]+distances[1])/2;
+    curD = distances[0];
+    double tmpA = maxA - ((maxD-curD)/maxD);
+    println("tmpA=="+tmpA);
+    tmpA = tmpA * Math.PI/180;
+    angle += (float) tmpA;
+    if(angle > Math.PI*2){angle -= Math.PI*2;}
+    
+    println("maxD=="+maxD);
+    println("curD=="+curD);
+    println("curD/maxD=="+(curD/maxD));
+    println("(maxD - (curD/maxD))=="+(maxD - (curD/maxD)));
+    println("(curD/maxD)/maxD)=="+((curD/maxD)/maxD));
+    println("tmpA=="+tmpA);
+    println("angle=="+angle);
+    println("*****");
     
     eX += cos(angle) * velocity;
     eY += sin(angle) * velocity;
