@@ -12,7 +12,7 @@ void setup(){
 }
 
 void draw(){
-  //clear();
+  clear();
   ball.draw();
 }
 
@@ -21,12 +21,11 @@ class Ball{
   float startVelocity = 5;
   float velocity = startVelocity;
   float dV = 0;
-  double startAngle = 0;//random(0, 360) * Math.PI/180;
+  double startAngle = random(0, 360) * Math.PI/180;
   float angle = (float) startAngle;
-  int angleDir = 1;
   float maxA = (float) Math.PI;
-  float eWidth = 10;
-  float eHeight = 10;
+  float eWidth = 2;
+  float eHeight = 2;
 //  float eX = random(0, wWidth);
 //  float eY = random(0, wHeight);
   float eX = wWidth/2;
@@ -35,21 +34,16 @@ class Ball{
   
   void draw(){
     ellipse(eX, eY, eWidth, eHeight);
-    saveFrame("bounce-####.jpg");
     
-    float curD = 0;
-    double tmpA = 0;
     float[] distances = {eY, wWidth - eX, wHeight - eY, eX};
     distances = sort(distances);
-    //curD = (distances[0]+distances[1])/2;
+    float curD = (distances[0]+distances[1])/2;
     curD = distances[0];
-      if(curD<250){
-      tmpA = maxA - ((maxD-curD)/maxD);
-      //println("tmpA=="+tmpA);
-      tmpA = tmpA * Math.PI/180;  //convert to degrees
-      angle += (float) tmpA;
-      if(angle > Math.PI*2){angle -= Math.PI*2;}
-    }
+    double tmpA = maxA - ((maxD-curD)/maxD);
+//    println("tmpA=="+tmpA);
+    tmpA = tmpA * Math.PI/180;
+    angle += (float) tmpA;
+    if(angle > Math.PI*2){angle -= Math.PI*2;}
     
 //    println("maxD=="+maxD);
 //    println("curD=="+curD);
