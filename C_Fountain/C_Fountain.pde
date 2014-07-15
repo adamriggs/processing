@@ -2,26 +2,43 @@ import java.util.Iterator;
 
 int wWidth = 640;
 int wHeight = 480;
-ArrayList<Particle> particles;
+ParticleSystem ps;
 
-void setup(){
+void setup() {
   size(wWidth, wHeight);
   background(0);
-  particles = new ArrayList<Particle>();
+  ps = new ParticleSystem(new PVector(width/2, 100));
 }
 
-void draw(){
+void draw() {
   background(0);
+  for(int i = 0; i < 100; i++){
+    ps.addParticle();
+  }
+  ps.run();
+}
+
+class ParticleSystem {
+  ArrayList<Particle> particles;
+  PVector origin;
   
-  particles.add(new Particle(new PVector(width/2, 100)));
+  ParticleSystem(PVector location){
+    origin = location.get();
+    particles = new ArrayList<Particle>();
+  }
   
-  Iterator<Particle> it = particles.iterator();
+  void addParticle(){
+    particles.add(new Particle(origin));
+  }
   
-  while(it.hasNext()){
-    Particle p = it.next();
-    p.run();
-    if(p.isDead()){
-      it.remove();
+  void run(){
+    Iterator it = particles.iterator();
+    while(it.hasNext()){
+      Particle p = it.next();
+      p.run();
+      if(p.isDead()){
+        it.remove();
+      }
     }
   }
 }
@@ -31,35 +48,36 @@ class Particle {
   PVector velocity;
   PVector acceleration;
   float lifespan;
-  
-  Particle(PVector l){
+
+  Particle(PVector l) {
     location = l.get();
     acceleration = new PVector(0, 0.05);
-    velocity = new PVector(random(-1,1), random(-2,0));
+    velocity = new PVector(random(-1, 1), random(-2, 0));
     lifespan = 255;
   }
-  
-  void run(){
+
+  void run() {
     update();
     display();
   }
-  
-  void update(){
+
+  void update() {
     velocity.add(acceleration);
     location.add(velocity);
     lifespan -= 2.0;
   }
-  
-  void display(){
+
+  void display() {
     stroke(175, lifespan);
     fill(175, lifespan);
     ellipse(location.x, location.y, 2, 2);
   }
-  
-  boolean isDead(){
-    if(lifespan < 0.0){
+
+  boolean isDead() {
+    if (lifespan < 0.0) {
       return true;
-    } else {
+    } 
+    else {
       return false;
     }
   }
