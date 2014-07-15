@@ -1,18 +1,28 @@
-int wWidth = 1280;
-int wHeight = 720;
-Particle p;
+import java.util.Iterator;
+
+int wWidth = 640;
+int wHeight = 480;
+ArrayList<Particle> particles;
 
 void setup(){
   size(wWidth, wHeight);
   background(0);
-  p = new Particle(new PVector(width/2, 10));
+  particles = new ArrayList<Particle>();
 }
 
 void draw(){
-  clear();
-  p.run();
-  if(p.isDead()){
-    println("particle is dead.");
+  background(0);
+  
+  particles.add(new Particle(new PVector(width/2, 100)));
+  
+  Iterator<Particle> it = particles.iterator();
+  
+  while(it.hasNext()){
+    Particle p = it.next();
+    p.run();
+    if(p.isDead()){
+      it.remove();
+    }
   }
 }
 
@@ -25,7 +35,7 @@ class Particle {
   Particle(PVector l){
     location = l.get();
     acceleration = new PVector(0, 0.05);
-    velocity = new PVector();
+    velocity = new PVector(random(-1,1), random(-2,0));
     lifespan = 255;
   }
   
@@ -41,9 +51,9 @@ class Particle {
   }
   
   void display(){
-    stroke(0, lifespan);
+    stroke(175, lifespan);
     fill(175, lifespan);
-    ellipse(location.x, location.y, 8, 8);
+    ellipse(location.x, location.y, 2, 2);
   }
   
   boolean isDead(){
