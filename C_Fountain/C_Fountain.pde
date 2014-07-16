@@ -7,16 +7,15 @@ ParticleSystem ps;
 void setup() {
   size(wWidth, wHeight);
   background(0);
+  frameRate(60);
   ps = new ParticleSystem(new PVector(width/2, 100));
-  for(int i = 0; i < 10; i++){
-    ps.addParticle();
-  }
 }
 
 void draw() {
   background(0);
   ps.run();
   ps.addParticle();
+  saveFrame("fountain-####.jpg");
 }
 
 
