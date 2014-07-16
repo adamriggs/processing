@@ -8,40 +8,45 @@ void setup() {
   size(wWidth, wHeight);
   background(0);
   ps = new ParticleSystem(new PVector(width/2, 100));
+  for(int i = 0; i < 10; i++){
+    ps.addParticle();
+  }
 }
 
 void draw() {
   background(0);
-  for(int i = 0; i < 100; i++){
-    ps.addParticle();
-  }
   ps.run();
+  ps.addParticle();
 }
+
+
+//*****CLASSES
 
 class ParticleSystem {
   ArrayList<Particle> particles;
   PVector origin;
   
-  ParticleSystem(PVector location){
-    origin = location.get();
+  ParticleSystem(PVector l) {
+    origin = l.get();
     particles = new ArrayList<Particle>();
   }
-  
-  void addParticle(){
+
+  void addParticle() {
     particles.add(new Particle(origin));
   }
-  
-  void run(){
-    Iterator it = particles.iterator();
-    while(it.hasNext()){
+
+  void run() {
+    Iterator<Particle> it = particles.iterator();
+    while (it.hasNext()) {
       Particle p = it.next();
       p.run();
-      if(p.isDead()){
+      if (p.isDead()) {
         it.remove();
       }
     }
   }
 }
+
 
 class Particle {
   PVector location;
@@ -68,8 +73,8 @@ class Particle {
   }
 
   void display() {
-    stroke(175, lifespan);
-    fill(175, lifespan);
+    stroke(255, 153, 0, lifespan);
+    fill(255, 153, 0 , lifespan);
     ellipse(location.x, location.y, 2, 2);
   }
 
@@ -82,4 +87,3 @@ class Particle {
     }
   }
 }
-
