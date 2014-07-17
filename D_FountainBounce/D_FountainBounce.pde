@@ -70,7 +70,11 @@ class Particle {
     location.add(velocity);
     lifespan -= 2.0;
   }
-
+  
+  void applyForce(){
+    
+  }
+  
   void display() {
     stroke(255, 153, 0, lifespan);
     fill(255, 153, 0 , lifespan);
