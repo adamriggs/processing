@@ -15,7 +15,7 @@ void draw() {
   background(0);
   ps.run();
   ps.addParticle();
-  //saveFrame("fountain-####.jpg");
+  saveFrame("fountain-####.jpg");
 }
 
 
@@ -69,6 +69,10 @@ class Particle {
     velocity.add(acceleration);
     location.add(velocity);
     lifespan -= 2.0;
+    
+    if(location.y>300){
+      velocity.y*=-1;
+    }
   }
   
   void applyForce(){
