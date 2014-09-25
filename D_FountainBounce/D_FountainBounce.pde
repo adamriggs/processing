@@ -15,7 +15,7 @@ void draw() {
   background(0);
   ps.run();
   ps.addParticle();
-  saveFrame("frames/fountain-####.jpg");
+  //saveFrame("frames/fountain-####.jpg");
 }
 
 
@@ -71,7 +71,13 @@ class Particle {
     lifespan -= 2.0;
     
     if(location.y>300){
-      velocity.y*=-1;
+      if(velocity.y>0){
+        velocity.y *= -1;
+        //println(acceleration.y);
+        acceleration.y *= 5 + random(2);
+        //println(acceleration.y);
+        //println("*****");
+      }
     }
   }
   
