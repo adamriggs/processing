@@ -7,15 +7,15 @@ ParticleSystem ps;
 void setup() {
   size(wWidth, wHeight);
   background(0);
-  frameRate(30);
-  ps = new ParticleSystem(new PVector(width/2, 100));
+  frameRate(60);
+  ps = new ParticleSystem(new PVector(width/2, 200));
 }
 
 void draw() {
   background(0);
   ps.run();
   ps.addParticle();
-  //saveFrame("frames/fountain-####.jpg");
+  saveFrame("frames/fountain-####.jpg");
 }
 
 
@@ -74,7 +74,8 @@ class Particle {
       if(velocity.y>0){
         velocity.y *= -1;
         //println(acceleration.y);
-        acceleration.y *= 5 + random(2);
+        acceleration.y *= 4 + random(2);
+        if(location.y > 300){location.y = 300;}
         //println(acceleration.y);
         //println("*****");
       }
