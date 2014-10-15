@@ -32,13 +32,14 @@ void draw() {
   
   activePool.add(newSeg);
   
-  //saveFrame("frames/frame-####.jpg");
+  saveFrame("frames/frame-####.jpg");
 }
 
 float checkRange(float num){
   float newNum = num + random(10)-5;
   float low = 1;
   float high = 100;
+  
   if(num<low){
     newNum = low;
   }
