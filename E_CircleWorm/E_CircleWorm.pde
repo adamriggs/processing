@@ -1,43 +1,64 @@
 import java.util.Iterator;
 
-int wWidth = 640;
-int wHeight = 480;
-ParticleSystem ps;
+int wWidth = 1280;
+int wHeight = 1040;
 
 ArrayList<Segment> unusedPool;
 ArrayList<Segment> activePool;
 
 Segment newSeg;
-Segment oldSeg;
+Segment prevSeg;
 
 void setup() {
   size(wWidth, wHeight);
   background(0);
   frameRate(60);
-  //ps = new ParticleSystem(new PVector(width/2, 100));
+  unusedPool = new ArrayList<Segment>();
   activePool = new ArrayList<Segment>();
 }
 
 void draw() {
-  //background(0);
-  //ps.run();
-  //ps.addParticle();
+  background(0);
   
-  if(newSeg != null){
-    oldSeg = newSeg;
-    newSeg = new Segment(oldSeg.x+1, oldSeg.y+1, checkRange(oldSeg.a), checkRange(oldSeg.b));
-  } else {
-    newSeg = new Segment(0, 0, random(10)+100, random(10)+100);
+  if(newSeg == null){
+    
+    newSeg = new Segment();
+    newSeg.init(0, 0, random(10)+100, random(10)+100);
+    
+  } else if(unusedPool.size() == 0){
+    
+    prevSeg = newSeg;
+    newSeg = new Segment();
+    newSeg.init(prevSeg.x+1, prevSeg.y+1, checkRange(prevSeg.a), checkRange(prevSeg.b));
+    
+  } else if(unusedPool.size() > 0){
+    
+    prevSeg = newSeg;
+    
+    newSeg = new Segment();
+    newSeg = unusedPool.get(0);
+    unusedPool.remove(newSeg);
+    
+    newSeg.init(prevSeg.x+1, prevSeg.y+1, checkRange(prevSeg.a), checkRange(prevSeg.b));
   }
   
   activePool.add(newSeg);
   
-  saveFrame("frames/frame-####.jpg");
+  for(int i = 0; i < activePool.size(); i++){
+    Segment seg = activePool.get(i);
+    seg.run();
+    if( seg.active == false ){
+      activePool.remove(seg);
+      unusedPool.add(seg);
+    }
+  }
+  
+  //saveFrame("frames/frame-####.jpg");
 }
 
 float checkRange(float num){
   float newNum = num + random(10)-5;
-  float low = 1;
+  float low = 10;
   float high = 100;
   
   if(num<low){
@@ -56,97 +77,39 @@ float checkRange(float num){
 
 class Segment {
   PVector location;
-  float lifespan;
   float x;
   float y;
   float a;
   float b;
+  int lifespan;
+  boolean active;
   
-  Segment(float X, float Y, float A, float B){
+  Segment(){
+    
+    
+  }
+  
+  void init(float X, float Y, float A, float B){
     x = X;
     y = Y;
     a = A;
     b = B;
+    lifespan = 255;
+    active = true;
     run();
-    
-  }
-  
-  void init(PVector Location, PVector Ellipse, int Color){
-    
   }
   
   void run(){
     ellipse(x, y, a, b);
-  }
-  
-  void calculateEllipse(){
-    
-  }
-  
-}
-
-class ParticleSystem {
-  ArrayList<Particle> particles;
-  PVector origin;
-  
-  ParticleSystem(PVector l) {
-    origin = l.get();
-    particles = new ArrayList<Particle>();
-  }
-
-  void addParticle() {
-    particles.add(new Particle(origin));
-  }
-
-  void run() {
-    Iterator<Particle> it = particles.iterator();
-    while (it.hasNext()) {
-      Particle p = it.next();
-      p.run();
-      if (p.isDead()) {
-        it.remove();
-      }
+    lifespan--;
+    if(lifespan <=0 ){
+      active = false;
     }
   }
-}
-
-
-class Particle {
-  PVector location;
-  PVector velocity;
-  PVector acceleration;
-  float lifespan;
-
-  Particle(PVector l) {
-    location = l.get();
-    acceleration = new PVector(0, 0.05);
-    velocity = new PVector(random(-1, 1), random(-2, 0));
-    lifespan = 255;
-  }
-
-  void run() {
-    update();
-    display();
-  }
-
-  void update() {
-    velocity.add(acceleration);
-    location.add(velocity);
-    lifespan -= 2.0;
-  }
-
-  void display() {
-    stroke(255, 153, 0, lifespan);
-    fill(255, 153, 0 , lifespan);
-    ellipse(location.x, location.y, 2, 2);
-  }
-
-  boolean isDead() {
-    if (lifespan < 0.0) {
-      return true;
-    } 
-    else {
-      return false;
-    }
-  }
+  
+//  Object cloneMe(){
+//   //return {X:x, Y:y, A:a, B:b};
+//    
+//  }
+  
 }
