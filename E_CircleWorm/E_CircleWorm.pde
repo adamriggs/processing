@@ -1,7 +1,7 @@
 import java.util.Iterator;
 
 int wWidth = 1280;
-int wHeight = 1040;
+int wHeight = 960;
 
 ArrayList<Segment> unusedPool;
 ArrayList<Segment> activePool;
@@ -23,13 +23,13 @@ void draw() {
   if(newSeg == null){
     
     newSeg = new Segment();
-    newSeg.init(0, 0, random(10)+100, random(10)+100);
+    newSeg.init(new PVector(0,0), new PVector(random(10)+100, random(10)+100));
     
   } else if(unusedPool.size() == 0){
     
     prevSeg = newSeg;
     newSeg = new Segment();
-    newSeg.init(prevSeg.x+1, prevSeg.y+1, checkRange(prevSeg.a), checkRange(prevSeg.b));
+    newSeg.init(newCoords(prevSeg.loc), newShape(prevSeg.shape));
     
   } else if(unusedPool.size() > 0){
     
@@ -39,7 +39,7 @@ void draw() {
     newSeg = unusedPool.get(0);
     unusedPool.remove(newSeg);
     
-    newSeg.init(prevSeg.x+1, prevSeg.y+1, checkRange(prevSeg.a), checkRange(prevSeg.b));
+    newSeg.init(newCoords(prevSeg.loc), newShape(prevSeg.shape));
   }
   
   activePool.add(newSeg);
@@ -56,60 +56,65 @@ void draw() {
   //saveFrame("frames/frame-####.jpg");
 }
 
-float checkRange(float num){
-  float newNum = num + random(10)-5;
-  float low = 10;
-  float high = 100;
+PVector newCoords(PVector Loc){
+  PVector loc = new PVector();
+  loc.x = Loc.x + random(5)-1;
+  loc.y = Loc.y + random(5)-1;
   
-  if(num<low){
-    newNum = low;
+  return loc; 
+}
+
+PVector newShape(PVector Shape){
+  PVector shape = new PVector(Shape.x + random(10)-5, Shape.y + random(10)-5);
+  int low = 10;
+  int high = 100;
+  
+  if(shape.x<low){
+    shape.x = low;
+  }
+  if(shape.y<low){
+    shape.y = low;
   }
   
-  if(num>high){
-    newNum = high;
+  if(shape.x>high){
+    shape.x = high;
+  }if(shape.y>high){
+    shape.y = high;
   }
   
-  return newNum;
+  return shape;
 }
 
 
 //*****CLASSES
 
 class Segment {
-  PVector location;
-  float x;
-  float y;
-  float a;
-  float b;
+  PVector loc;
+  PVector shape;
   int lifespan;
   boolean active;
+  color c;
   
   Segment(){
     
-    
   }
   
-  void init(float X, float Y, float A, float B){
-    x = X;
-    y = Y;
-    a = A;
-    b = B;
-    lifespan = 255;
+  void init(PVector Loc, PVector Shape){
+    loc = Loc;
+    shape = Shape;
+    lifespan = 128;
     active = true;
     run();
+    c = (255);
   }
   
   void run(){
-    ellipse(x, y, a, b);
+    fill(c);
+    stroke(255);
+    ellipse(loc.x, loc.y, shape.x, shape.y);
     lifespan--;
     if(lifespan <=0 ){
       active = false;
     }
   }
-  
-//  Object cloneMe(){
-//   //return {X:x, Y:y, A:a, B:b};
-//    
-//  }
-  
 }
